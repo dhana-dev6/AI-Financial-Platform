@@ -1,0 +1,26 @@
+Date,Description,Amount,Category,Type
+2023-10-01,Opening Balance,50000,Equity,Credit
+2023-10-02,Client Payment - ACME Corp,12500,Revenue,Credit
+2023-10-03,Office Rent - October,-3500,Rent,Debit
+2023-10-05,Office Supplies - Staples,-450,Supplies,Debit
+2023-10-07,Client Payment - Globex,8200,Revenue,Credit
+2023-10-10,Utility Bill - Electric,-1200,Utilities,Debit
+2023-10-12,Inventory Purchase - Raw Materials,-15000,COGS,Debit
+2023-10-15,Payroll - Mid Month,-12000,Salaries,Debit
+2023-10-18,Consulting Fee - TechStart,4500,Revenue,Credit
+2023-10-20,Software Subscription - CRM,-300,Software,Debit
+2023-10-22,Client Payment - Soylent Corp,10000,Revenue,Credit
+2023-10-25,Marketing Ad Spend - Google,-2500,Marketing,Debit
+2023-10-27,Loan Repayment - Bank ABC,-2000,Debt,Debit
+2023-10-29,Client Payment - Umbrella Corp,15000,Revenue,Credit
+2023-10-30,Internet Service - ISP,-150,Utilities,Debit
+2023-10-31,Payroll - End Month,-12000,Salaries,Debit
+2023-11-01,Client Payment - Stark Ind,20000,Revenue,Credit
+2023-11-03,Office Rent - November,-3500,Rent,Debit
+2023-11-05,Inventory Purchase - Bulk,-8000,COGS,Debit
+2023-11-08,Travel Expenses - Sales Trip,-1200,Travel,Debit
+2023-11-12,Client Payment - Wayne Ent,18000,Revenue,Credit
+2023-11-15,Payroll - Mid Month,-12000,Salaries,Debit
+2023-11-20,Tax Prepayment,-5000,Tax,Debit
+2023-11-25,Equipment Repair,-800,Maintenance,Debit
+2023-11-28,Client Payment - Cyberdyne,11000,Revenue,Credit

@@ -1,0 +1,38 @@
+{
+    "gstin": "27ABCDE1234F1Z5",
+    "fp": "092023",
+    "b2b": [
+        {
+            "ctin": "27XMLZT5432A1Z5",
+            "inv": [
+                {
+                    "inum": "INV-101",
+                    "idt": "01-09-2023",
+                    "val": 15000.00
+                },
+                {
+                    "inum": "INV-102",
+                    "idt": "15-09-2023",
+                    "val": 25000.00
+                },
+                {
+                    "inum": "EXP-001",
+                    "idt": "20-09-2023",
+                    "val": -5000.00,
+                    "desc": "Office Rent (Simulated Expense)"
+                },
+                {
+                    "inum": "EXP-002",
+                    "idt": "22-09-2023",
+                    "val": -2500.00,
+                    "desc": "Software Subscription"
+                }
+            ]
+        }
+    ],
+    "b2cs": [
+        {
+            "txval": 50000.00
+        }
+    ]
+}
