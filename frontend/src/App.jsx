@@ -6,6 +6,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 function App() {
   // Hackathon Hotfix: Hardcode production URL to guarantee connection
   const API_BASE = import.meta.env.VITE_API_URL || "https://ai-financial-platform-1.onrender.com";
+  console.log("🔹 DEBUG: Current API Base URL:", API_BASE);
+
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadMode, setUploadMode] = useState('file');
