@@ -4,6 +4,7 @@ import { Upload, Activity, AlertTriangle, CheckCircle, TrendingUp, DollarSign, P
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, Pie, PieChart as RePieChart, AreaChart, Area } from 'recharts';
 
 function App() {
+  const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadMode, setUploadMode] = useState('file');
@@ -19,7 +20,7 @@ function App() {
   // Fetch Audit Logs
   const fetchLogs = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/compliance_logs");
+      const res = await axios.get(`${API_BASE}/compliance_logs`);
       setLogs(res.data);
     } catch (err) {
       console.error("Error fetching logs", err);
@@ -36,7 +37,7 @@ function App() {
     setLoading(true);
     try {
       // 1. Fetch Mock Data
-      const response = await axios.get(`/connect_bank/${bankName}`);
+      const response = await axios.get(`${API_BASE}/connect_bank/${bankName}`);
       console.log("Bank API Response:", response.data);
       const bankData = response.data;
 
@@ -66,7 +67,7 @@ function App() {
       fData.append("industry", formData.industry);
       fData.append("language", formData.language);
 
-      const resultRes = await axios.post("/analyze", fData, {
+      const resultRes = await axios.post(`${API_BASE}/analyze`, fData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setResult(resultRes.data);
@@ -112,12 +113,12 @@ function App() {
         formDataObj.append("industry", formData.industry);
         formDataObj.append("language", formData.language);
 
-        response = await axios.post("http://127.0.0.1:8000/analyze", formDataObj, {
+        response = await axios.post(`${API_BASE}/analyze`, formDataObj, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
         // Bank Connect Mode
-        const bankResp = await axios.get(`http://127.0.0.1:8000/connect_bank/${formData.selectedBank}`);
+        const bankResp = await axios.get(`${API_BASE}/connect_bank/${formData.selectedBank}`);
 
         // Simulate sending this bank data to analyze endpoint (mock)
         // For now, we reuse the analyze logic but ideally backend handles this.
@@ -155,7 +156,7 @@ function App() {
   const handleDownloadReport = async () => {
     if (!result) return;
     try {
-      const response = await axios.post('/generate_report', {
+      const response = await axios.post(`${API_BASE}/generate_report`, {
         company_name: formData.companyName,
         result: result
       }, { responseType: 'blob' });

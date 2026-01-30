@@ -6,3 +6,6 @@ sqlalchemy
 psycopg2-binary
 openai
 python-dotenv
+scikit-learn
+fpdf
+cryptography
