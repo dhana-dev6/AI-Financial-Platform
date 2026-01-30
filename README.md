@@ -1,6 +1,6 @@
 # 🚀 SME Financial Health Platform (AI-Powered CFO)
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://aifinancialplatform.netlify.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://ai-financial-platform-1.onrender.com/)
 [![Backend Status](https://img.shields.io/badge/Backend-Render-blue)](https://ai-financial-platform-1.onrender.com/docs)
 [![License](https://img.shields.io/badge/License-MIT-gray)]()
 
@@ -39,11 +39,13 @@ An **"Artificial Intelligence CFO"** that:
 
 ### 📄 4. Automated Reporting
 *   **Investor One-Pager**: One-click generation of professional PDF reports containing the Executive Summary and Key Metrics.
-*   **Forecasting**: Linear Regression models to predict next month's cash flow.
+*   **Forecasting**: Statistical regression models to predict next month's cash flow.
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack (Monolith Architecture)
+
+We utilize a robust **Monolith** architecture where the high-performance Python backend serves both the API and the React frontend static assets, eliminating CORS issues and ensuring a unified deployment.
 
 | Component | Technology |
 | :--- | :--- |
@@ -52,7 +54,7 @@ An **"Artificial Intelligence CFO"** that:
 | **AI Models** | Groq (Llama 3), OpenRouter (Gemini) |
 | **Database** | SQLAlchemy (SQLite for Dev, PostgreSQL ready) |
 | **Security** | Python Cryptography (Fernet Encryption) |
-| **Deployment** | Netlify (Frontend), Render (Backend) |
+| **Hosting** | Render (Unified Service) |
 
 ---
 
@@ -69,7 +71,9 @@ git clone https://github.com/dhana-dev6/AI-Financial-Platform.git
 cd AI-Financial-Platform
 ```
 
-### 2. Backend Setup
+### 2. Run Locally (Monolith Method)
+Since the frontend is pre-built into `backend/static`, you primarily run the backend.
+
 ```bash
 cd backend
 python -m venv .venv
@@ -80,38 +84,23 @@ source .venv/bin/activate
 
 pip install -r requirements.txt
 
-# Usage your keys in .env
-# Create a .env file with:
-# GROQ_API_KEY=gsk_...
+# Create a .env file with your API keys:
 # OPENROUTER_API_KEY=sk-or-...
 
+# Start the Unified Server
 python -m uvicorn main:app --reload
 ```
-*Backend runs on `http://localhost:8000`*
-
-### 3. Frontend Setup
-```bash
-cd frontend
-npm install
-npm run dev
-```
-*Frontend runs on `http://localhost:5173`*
+App runs on `http://localhost:8000`
 
 ---
 
-## 🌍 Deployment
+## 🌍 Production Deployment
 
-### Frontend (Netlify)
-The frontend is deployed as a static site.
-*   **Build Command**: `npm run build`
-*   **Publish Directory**: `dist`
-*   **Environment Variable**: `VITE_API_URL` = `https://your-backend.onrender.com`
+this project is deployed on **Render** as a single Web Service.
 
-### Backend (Render)
-The backend is a Python Web Service.
 *   **Build Command**: `pip install -r requirements.txt`
 *   **Start Command**: `uvicorn main:app --host 0.0.0.0 --port 10000`
-*   **Environment Variables**: Add your API Keys here.
+*   **Root Directory**: `backend`
 
 ---
 
