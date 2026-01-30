@@ -36,29 +36,7 @@ app.add_middleware(
 def health_check():
     return {"status": "online", "version": "1.0.1", "message": "Backend is running!"}
 
-# Serve React Frontend (Must be AFTER API routes)
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-
-# Ensure static folder exists to prevent crash during dev
-if not os.path.exists("static"):
-    os.makedirs("static")
-
-app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
-
-@app.get("/{full_path:path}")
-async def serve_react_app(full_path: str):
-    # API routes are handled automatically above by FastAPI logic due to order
-    # This catch-all serves index.html for React Router
-    if full_path.startswith("api") or full_path.startswith("docs") or full_path.startswith("openapi"):
-        raise HTTPException(status_code=404, detail="Not Found")
-    
-    # Check if file exists in static folder (e.g. favicon)
-    file_path = os.path.join("static", full_path)
-    if os.path.exists(file_path) and os.path.isfile(file_path):
-        return FileResponse(file_path)
-        
-    return FileResponse("static/index.html")
+# Static Files Mount (Catch-All Moved to Bottom)
 
 # Dependency to get DB session
 def get_db():
@@ -348,3 +326,28 @@ async def get_report(data: dict):
     
     # Return as downloadable file
     return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=Report_{company_name}.pdf"})
+
+# ==========================================
+# CATCH-ALL ROUTE FOR REACT (MUST BE LAST)
+# ==========================================
+import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# Ensure static folder exists to prevent crash during dev
+if not os.path.exists("static"):
+    os.makedirs("static")
+
+app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
+
+@app.get("/{full_path:path}")
+async def serve_react_app(full_path: str):
+    # API routes match first because this is defined LAST.
+    if full_path.startswith("api") or full_path.startswith("docs") or full_path.startswith("openapi"):
+        raise HTTPException(status_code=404, detail="Not Found")
+    
+    file_path = os.path.join("static", full_path)
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return FileResponse(file_path)
+        
+    return FileResponse("static/index.html")
