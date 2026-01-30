@@ -116,9 +116,7 @@ function App() {
         formDataObj.append("industry", formData.industry);
         formDataObj.append("language", formData.language);
 
-        response = await axios.post(`${API_BASE}/analyze`, formDataObj, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        response = await axios.post(`${API_BASE}/analyze`, formDataObj);
       } else {
         // Bank Connect Mode
         const bankResp = await axios.get(`${API_BASE}/connect_bank/${formData.selectedBank}`);

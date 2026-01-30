@@ -32,6 +32,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def health_check():
+    return {"status": "online", "version": "1.0.1", "message": "Backend is running!"}
+
 # Dependency to get DB session
 def get_db():
     db = SessionLocal()
