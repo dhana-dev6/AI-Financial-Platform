@@ -4,9 +4,9 @@ import { Upload, Activity, AlertTriangle, CheckCircle, TrendingUp, DollarSign, P
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, Pie, PieChart as RePieChart, AreaChart, Area } from 'recharts';
 
 function App() {
-  // Hackathon Hotfix: Hardcode production URL to guarantee connection
-  const API_BASE = import.meta.env.VITE_API_URL || "https://ai-financial-platform-1.onrender.com";
-  console.log("🔹 DEBUG: Current API Base URL:", API_BASE);
+  // Monolith Deployment: Use relative path (Backend serves Frontend)
+  const API_BASE = "";
+  console.log("🔹 DEBUG: Monolith Mode Active");
 
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);

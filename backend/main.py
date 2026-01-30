@@ -32,9 +32,33 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
+@app.get("/health")
 def health_check():
     return {"status": "online", "version": "1.0.1", "message": "Backend is running!"}
+
+# Serve React Frontend (Must be AFTER API routes)
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# Ensure static folder exists to prevent crash during dev
+if not os.path.exists("static"):
+    os.makedirs("static")
+
+app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
+
+@app.get("/{full_path:path}")
+async def serve_react_app(full_path: str):
+    # API routes are handled automatically above by FastAPI logic due to order
+    # This catch-all serves index.html for React Router
+    if full_path.startswith("api") or full_path.startswith("docs") or full_path.startswith("openapi"):
+        raise HTTPException(status_code=404, detail="Not Found")
+    
+    # Check if file exists in static folder (e.g. favicon)
+    file_path = os.path.join("static", full_path)
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return FileResponse(file_path)
+        
+    return FileResponse("static/index.html")
 
 # Dependency to get DB session
 def get_db():
