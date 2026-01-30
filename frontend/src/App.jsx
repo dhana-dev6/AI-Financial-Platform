@@ -4,7 +4,8 @@ import { Upload, Activity, AlertTriangle, CheckCircle, TrendingUp, DollarSign, P
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, Pie, PieChart as RePieChart, AreaChart, Area } from 'recharts';
 
 function App() {
-  const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+  // Hackathon Hotfix: Hardcode production URL to guarantee connection
+  const API_BASE = import.meta.env.VITE_API_URL || "https://ai-financial-platform-1.onrender.com";
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadMode, setUploadMode] = useState('file');
