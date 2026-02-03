@@ -46,20 +46,26 @@ def get_db():
     finally:
         db.close()
 
-# Initialize OpenAI (Using OpenRouter for Free Tier)
-# Initialize OpenAI (Using OpenRouter for Free Tier)
-client = OpenAI(
+
+# 1. Primary Client: Groq
+groq_client = OpenAI(
+    base_url="https://api.groq.com/openai/v1",
+    api_key=os.getenv("GROQ_API_KEY")
+)
+
+# 2. Backup Client: OpenRouter
+openrouter_client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=os.getenv("OPENROUTER_API_KEY"),
     default_headers={
-        "HTTP-Referer": "http://localhost:5173", # Optional: For OpenRouter rankings
-        "X-Title": "SME Financial Health Platform", # Optional: For OpenRouter rankings
+        "HTTP-Referer": "http://localhost:5173",
+        "X-Title": "SME Financial Health Platform",
     }
 )
 
 def analyze_with_llm(financial_summary, language="English"):
     """
-    Sends the calculated metrics to OpenAI for detailed, structured analysis.
+    Sends metrics to Groq (Primary). If fails, falls back to OpenRouter (Backup).
     """
     prompt = f"""
     You are a high-level Virtual CFO for an SME. 
@@ -79,56 +85,55 @@ def analyze_with_llm(financial_summary, language="English"):
     3. generate REAL insights based on the numbers provided. Do not return empty fields or just the keys.
     """
     
-    try:
+    def fetch_ai_response(client, model_name, provider_name):
+        print(f"Attempting analysis via {provider_name}...")
         response = client.chat.completions.create(
-            model="openai/gpt-oss-120b", # Reliable free model
+            model=model_name,
             messages=[
                 {"role": "system", "content": "You are a helpful financial expert assistant that outputs valid JSON."},
                 {"role": "user", "content": prompt}
             ],
             response_format={"type": "json_object"}
         )
-        content = response.choices[0].message.content
-        print(f"RAW LLM RESPONSE:\n{content}\n----------------")
-        
-        # Cleanup
-        content = content.replace("```json", "").replace("```", "").strip()
-        
-        # basic validation
-        if 'executive_summary' not in content:
-             # Fallback
-             data = {
-                "creditworthiness": "Unknown",
-                "risk_assessment": "Analysis unavailable.",
-                "cost_optimization": [],
-                "executive_summary": f"Net Profit Margin: {financial_summary.get('Profit Margin', 'N/A')}. Revenue: {financial_summary.get('Total Revenue', '0')}.",
-                "recommended_products": []
-             }
-             content = json.dumps(data)
+        return response.choices[0].message.content
 
-        return content
-
+    content = None
+    
+    # Attempt 1: Groq (Primary)
+    try:
+        content = fetch_ai_response(groq_client, "openai/gpt-oss-120b", "Groq")
+        print("Groq Analysis Successful.")
     except Exception as e:
-        print(f"LLM EXCEPTION: {e}")
+        print(f"Groq API Failed: {e}")
         
-        error_msg = "Could not generate risk assessment due to AI service disruption."
-        summary_msg = f"The business reports a net profit margin of {financial_summary.get('Profit Margin', 'N/A')}. Revenue is {financial_summary.get('Total Revenue', '0')}."
-        
-        if "429" in str(e) or "Rate limit" in str(e):
-             summary_msg += " (Daily Free AI Limit Reached)."
-             error_msg = "Daily Free AI Limit Reached. Please try again tomorrow or add credit."
-        else:
-             summary_msg += " (AI Unavailable)."
-        
-        # Robust Fallback
-        fallback_data = {
-            "creditworthiness": "Unknown",
-            "risk_assessment": error_msg,
-            "cost_optimization": [],
-            "executive_summary": summary_msg,
-            "recommended_products": []
-        }
-        return json.dumps(fallback_data)
+        # Attempt 2: OpenRouter (Backup)
+        try:
+             print("Switching to Backup Provider (OpenRouter)...")
+             content = fetch_ai_response(openrouter_client, "openai/gpt-oss-120b", "OpenRouter")
+             print("OpenRouter Backup Successful.")
+        except Exception as e2:
+             print(f"OpenRouter Backup Failed: {e2}")
+
+    # Process Result or Fallback
+    if content:
+        try:
+            print(f"RAW LLM RESPONSE:\n{content}\n----------------")
+            content = content.replace("```json", "").replace("```", "").strip()
+            if 'executive_summary' in content:
+                return content
+        except Exception as e:
+            print(f"Response Parsing Error: {e}")
+
+    # Final Fallback if both failed or parsing failed
+    print("All AI providers failed. Returning Fallback.")
+    fallback_data = {
+        "creditworthiness": "Unknown",
+        "risk_assessment": "Analysis unavailable due to AI service disruption.",
+        "cost_optimization": [],
+        "executive_summary": f"Net Profit Margin: {financial_summary.get('Profit Margin', 'N/A')}. Revenue: {financial_summary.get('Total Revenue', '0')}.",
+        "recommended_products": []
+    }
+    return json.dumps(fallback_data)
 
 @app.post("/analyze")
 async def analyze_financials(
