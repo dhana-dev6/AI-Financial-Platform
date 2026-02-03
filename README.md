@@ -109,4 +109,4 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ---
 
-> Built for **AI Hackathon 2026** by Dhana Akash.
+> Built for **AI Hackathon 2026** by Dhanasekar.
