@@ -14,7 +14,7 @@ SMEs often struggle with financial literacy, cash flow management, and complianc
 ## 💡 The Solution
 An **"Artificial Intelligence CFO"** that:
 1.  Ingests financial data (CSV, PDF, Bank APIs).
-2.  Analyzes health using **Llama-3-70B** (Groq) & **Gemini Flash 2.0**.
+2.  Analyzes health using **GPT** (Groq) & **GPT 4**.
 3.  Provides actionable insights (Risk Warnings, Cost-Cutting Strategies).
 4.  Generates compliant reports (PDFs) for investors.
 
