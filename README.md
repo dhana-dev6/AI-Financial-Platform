@@ -23,8 +23,8 @@ An **"Artificial Intelligence CFO"** that:
 ## ✨ Key Features
 
 ### 🧠 1. Dual-AI Intelligence Engine
-*   **Primary Brain**: Uses `Llama-3-70b-8192` via Groq Cloud for **ultra-fast** (<2s) analysis.
-*   **Smart Fallback**: Automatically switches to `Google Gemini 2.0 Flash` (via OpenRouter) if the primary model is busy or rate-limited.
+*   **Primary Brain**: Uses `GPT` via Groq Cloud for **ultra-fast** (<2s) analysis.
+*   **Smart Fallback**: Automatically switches to `GPT` (via OpenRouter) if the primary model is busy or rate-limited.
 *   **Multilingual**: Speaks your language! Generates reports in English, Hindi, Tamil, etc. based on user preference.
 
 ### 📊 2. Interactive Financial Dashboard
@@ -51,7 +51,7 @@ We utilize a robust **Monolith** architecture where the high-performance Python 
 | :--- | :--- |
 | **Frontend** | React 18, Vite, TailwindCSS, Lucide Icons, Recharts |
 | **Backend** | FASTAPI (Python), Uvicorn |
-| **AI Models** | Groq (Llama 3), OpenRouter (Gemini) |
+| **AI Models** | Groq (GPT), OpenRouter (GPT) |
 | **Database** | SQLAlchemy (SQLite for Dev, PostgreSQL ready) |
 | **Security** | Python Cryptography (Fernet Encryption) |
 | **Hosting** | Render (Unified Service) |
